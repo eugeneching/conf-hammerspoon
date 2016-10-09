@@ -7,8 +7,9 @@ hs.window.animationDuration = 0
 require("hs.application")
 require("hs.window")
 
+
 -----------------------------------------------
--- Window movement
+-- Utilities
 -----------------------------------------------
 
 function isAlreadyAtPosition(target)
@@ -26,6 +27,43 @@ function isAlreadyAtPosition(target)
     end
 end
 
+function flip(originX, factor, screen)
+    if originX == screen:frame().x then
+        return screen:frame().x + (factor - 1) * screen:frame().w/factor
+    else
+        return screen:frame().x
+    end
+end
+
+function isWindowMaximized(win)
+    if win:frame().x == win:screen():frame().x and win:frame().x + win:frame().w == win:screen():frame().w then
+        return true
+    end
+
+    return false
+end
+
+function isTetheredToLeftEdge(win)
+    if win:frame().x == win:screen():frame().x then
+        return true
+    end
+
+    return false
+end
+
+function isTetheredToRightEdge(win)
+    if win:frame().x + win:frame().w == win:screen():frame().w then
+        return true
+    end
+
+    return false
+end
+
+
+-----------------------------------------------
+-- Window movement
+-----------------------------------------------
+
 function move(target)
     local win = hs.window.focusedWindow()
     local newFrame = win:frame()
@@ -36,14 +74,6 @@ function move(target)
     newFrame.h = target.h
 
     win:setFrame(newFrame)
-end
-
-function flip(originX, factor, screen)
-    if originX == screen:frame().x then
-        return screen:frame().x + (factor - 1) * screen:frame().w/factor
-    else
-        return screen:frame().x
-    end
 end
 
 function moveFullScreen()
@@ -217,7 +247,7 @@ function moveRightDownQuarter()
     end
 end
 
-function squishLeftHalf()
+function growShrinkToLeft()
     local factor = 6
 
     if hs.window.focusedWindow() then
@@ -225,12 +255,29 @@ function squishLeftHalf()
         local newFrame = win:frame()
         local delta = win:screen():frame().w / factor
 
-        newFrame.w = newFrame.w - delta
+        if isWindowMaximized(win) then
+            -- Window is maximized, shrink right edge
+            newFrame.w = newFrame.w - delta
+
+        elseif isTetheredToLeftEdge(win) then
+            -- Window is on left-edge, shrink right edge
+            newFrame.w = newFrame.w - delta
+
+        elseif isTetheredToRightEdge(win) then
+            -- Window is on right-edge, grow left edge
+            newFrame.x = newFrame.x - delta
+            newFrame.w = newFrame.w + delta
+
+        else
+            -- Do nothing
+            return
+        end
+
         win:setFrame(newFrame)
     end
 end
 
-function squishRightHalf()
+function growShrinkToRight()
     local factor = 6
 
     if hs.window.focusedWindow() then
@@ -238,35 +285,25 @@ function squishRightHalf()
         local newFrame = win:frame()
         local delta = win:screen():frame().w / factor
 
-        newFrame.x = newFrame.x + delta
-        newFrame.w = newFrame.w - delta
-        win:setFrame(newFrame)
-    end
-end
+        if isWindowMaximized(win) then
+            -- Window is maximized, shrink left edge
+            newFrame.x = newFrame.x + delta
+            newFrame.w = newFrame.w - delta
 
-function growLeftHalf()
-    local factor = 6
+        elseif isTetheredToLeftEdge(win) then
+            -- Window is on left-edge, grow right edge
+            newFrame.w = newFrame.w + delta
 
-    if hs.window.focusedWindow() then
-        local win = hs.window.focusedWindow()
-        local newFrame = win:frame()
-        local delta = win:screen():frame().w / factor
+        elseif isTetheredToRightEdge(win) then
+            -- Window is on right-edge, shrink left edge
+            newFrame.x = newFrame.x + delta
+            newFrame.w = newFrame.w - delta
 
-        newFrame.x = newFrame.x - delta
-        newFrame.w = newFrame.w + delta
-        win:setFrame(newFrame)
-    end
-end
+        else
+            -- Do nothing
+            return
+        end
 
-function growRightHalf()
-    local factor = 6
-
-    if hs.window.focusedWindow() then
-        local win = hs.window.focusedWindow()
-        local newFrame = win:frame()
-        local delta = win:screen():frame().w / factor
-
-        newFrame.w = newFrame.w + delta
         win:setFrame(newFrame)
     end
 end
@@ -280,37 +317,37 @@ function switchWindowByKey()
     hs.hints.windowHints()
 end
 
-function focusWindowNorth()
-    if hs.window.focusedWindow() then
-        hs.window.focusedWindow():focusWindowNorth()
-    else
-        hs.alert.show("no active window")
-    end
-end
+-- function focusWindowNorth()
+--     if hs.window.focusedWindow() then
+--         hs.window.focusedWindow():focusWindowNorth()
+--     else
+--         hs.alert.show("no active window")
+--     end
+-- end
 
-function focusWindowSouth()
-    if hs.window.focusedWindow() then
-        hs.window.focusedWindow():focusWindowSouth()
-    else
-        hs.alert.show("no active window")
-    end
-end
+-- function focusWindowSouth()
+--     if hs.window.focusedWindow() then
+--         hs.window.focusedWindow():focusWindowSouth()
+--     else
+--         hs.alert.show("no active window")
+--     end
+-- end
 
-function focusWindowEast()
-    if hs.window.focusedWindow() then
-    hs.window.focusedWindow():focusWindowEast()
-    else
-        hs.alert.show("no active window")
-    end
-end
+-- function focusWindowEast()
+--     if hs.window.focusedWindow() then
+--     hs.window.focusedWindow():focusWindowEast()
+--     else
+--         hs.alert.show("no active window")
+--     end
+-- end
 
-function focusWindowWest()
-    if hs.window.focusedWindow() then
-        hs.window.focusedWindow():focusWindowWest()
-    else
-        hs.alert.show("no active window")
-    end
-end
+-- function focusWindowWest()
+--     if hs.window.focusedWindow() then
+--         hs.window.focusedWindow():focusWindowWest()
+--     else
+--         hs.alert.show("no active window")
+--     end
+-- end
 
 -----------------------------------------------
 -- Key bindings
@@ -324,16 +361,14 @@ hs.hotkey.bind(mash, 'n', moveLeftDownQuarter)
 hs.hotkey.bind(mash, 'p', moveRightUpQuarter)
 hs.hotkey.bind(mash, '.', moveRightDownQuarter)
 
-hs.hotkey.bind(mash, '[', squishLeftHalf)
-hs.hotkey.bind(mash, ']', squishRightHalf)
-hs.hotkey.bind(hyper, '[', growLeftHalf)
-hs.hotkey.bind(hyper, ']', growRightHalf)
+hs.hotkey.bind(mash, '[', growShrinkToLeft)
+hs.hotkey.bind(mash, ']', growShrinkToRight)
 
 hs.hotkey.bind(mash, 'space', switchWindowByKey)
-hs.hotkey.bind(mash, 'up', focusWindowNorth)
-hs.hotkey.bind(mash, 'down', focusWindowSouth)
-hs.hotkey.bind(mash, 'right', focusWindowEast)
-hs.hotkey.bind(mash, 'left', focusWindowWest)
+-- hs.hotkey.bind(mash, 'up', focusWindowNorth)
+-- hs.hotkey.bind(mash, 'down', focusWindowSouth)
+-- hs.hotkey.bind(mash, 'right', focusWindowEast)
+-- hs.hotkey.bind(mash, 'left', focusWindowWest)
 
 -----------------------------------------------
 -- Launcher
