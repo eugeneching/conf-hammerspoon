@@ -14,7 +14,12 @@ require("hs.window")
 function isAlreadyAtPosition(target)
     local win = hs.window.focusedWindow()
 
-    if win:frame().x == target.x and win:frame().y == target.y and win:frame().w == target.w and win:frame().h == target.h then
+    if
+        math.abs(win:frame().x - target.x) <= 10 and
+        math.abs(win:frame().y - target.y) <= 10 and
+        math.abs(win:frame().w - target.w) <= 10 and
+        math.abs(win:frame().h - target.h) <= 10
+    then
         return true
     else
         return false
