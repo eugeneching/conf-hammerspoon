@@ -103,7 +103,7 @@ function moveLeftHalf()
         }
 
         if isAlreadyAtPosition(target) then
-            local nextScreen = win:screen():previous()
+            local nextScreen = win:screen():next()
             target = {
                 x = flip(nextScreen:frame().x, factor, nextScreen),
                 y = nextScreen:frame().y,
