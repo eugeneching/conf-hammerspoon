@@ -155,7 +155,7 @@ function moveLeftUpQuarter()
         }
 
         if isAlreadyAtPosition(target) then
-            local nextScreen = win:screen():previous()
+            local nextScreen = win:screen():next()
             target = {
                 x = flip(nextScreen:frame().x, factor, nextScreen),
                 y = nextScreen:frame().y,
@@ -181,7 +181,7 @@ function moveLeftDownQuarter()
         }
 
         if isAlreadyAtPosition(target) then
-            local nextScreen = win:screen():previous()
+            local nextScreen = win:screen():next()
             target = {
                 x = flip(nextScreen:frame().x, factor, nextScreen),
                 y = win:screen():frame().y + win:screen():frame().h/factor,
