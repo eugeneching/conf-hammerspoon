@@ -104,7 +104,7 @@ function moveLeftHalf()
         }
 
         if isAlreadyAtPosition(target) then
-            local nextScreen = win:screen():next()
+            local nextScreen = win:screen():previous()
             target = {
                 x = flip(nextScreen:frame().x, factor, nextScreen),
                 y = nextScreen:frame().y,
@@ -130,7 +130,7 @@ function moveRightHalf()
         }
 
         if isAlreadyAtPosition(target) then
-            local nextScreen = win:screen():previous()
+            local nextScreen = win:screen():next()
             target = {
                 x = flip(nextScreen:frame().x + nextScreen:frame().w/factor, factor, nextScreen),
                 y = nextScreen:frame().y,
@@ -156,7 +156,7 @@ function moveLeftUpQuarter()
         }
 
         if isAlreadyAtPosition(target) then
-            local nextScreen = win:screen():next()
+            local nextScreen = win:screen():previous()
             target = {
                 x = flip(nextScreen:frame().x, factor, nextScreen),
                 y = nextScreen:frame().y,
@@ -182,7 +182,7 @@ function moveLeftDownQuarter()
         }
 
         if isAlreadyAtPosition(target) then
-            local nextScreen = win:screen():next()
+            local nextScreen = win:screen():previous()
             target = {
                 x = flip(nextScreen:frame().x, factor, nextScreen),
                 y = win:screen():frame().y + win:screen():frame().h/factor,
@@ -209,7 +209,7 @@ function moveRightUpQuarter()
         }
 
         if isAlreadyAtPosition(target) then
-            local nextScreen = win:screen():previous()
+            local nextScreen = win:screen():next()
             target = {
                 x = flip(nextScreen:frame().x + win:screen():frame().w/factor, factor, nextScreen),
                 y = nextScreen:frame().y,
@@ -235,7 +235,7 @@ function moveRightDownQuarter()
         }
 
         if isAlreadyAtPosition(target) then
-            local nextScreen = win:screen():previous()
+            local nextScreen = win:screen():next()
             target = {
                 x = flip(nextScreen:frame().x + win:screen():frame().w/factor, factor, nextScreen),
                 y = win:screen():frame().y + win:screen():frame().h/factor,
