@@ -1,4 +1,5 @@
 local cmd = {"cmd"}
+local cmdShift = {"cmd", "shift"}
 local mash = {"cmd", "alt", "ctrl"}
 local hyper = {"cmd", "alt", "ctrl", "shift"}
 
@@ -317,38 +318,6 @@ function switchWindowByKey()
     hs.hints.windowHints()
 end
 
--- function focusWindowNorth()
---     if hs.window.focusedWindow() then
---         hs.window.focusedWindow():focusWindowNorth()
---     else
---         hs.alert.show("no active window")
---     end
--- end
-
--- function focusWindowSouth()
---     if hs.window.focusedWindow() then
---         hs.window.focusedWindow():focusWindowSouth()
---     else
---         hs.alert.show("no active window")
---     end
--- end
-
--- function focusWindowEast()
---     if hs.window.focusedWindow() then
---     hs.window.focusedWindow():focusWindowEast()
---     else
---         hs.alert.show("no active window")
---     end
--- end
-
--- function focusWindowWest()
---     if hs.window.focusedWindow() then
---         hs.window.focusedWindow():focusWindowWest()
---     else
---         hs.alert.show("no active window")
---     end
--- end
-
 -----------------------------------------------
 -- Key bindings
 -----------------------------------------------
@@ -365,10 +334,6 @@ hs.hotkey.bind(mash, '[', growShrinkToLeft)
 hs.hotkey.bind(mash, ']', growShrinkToRight)
 
 hs.hotkey.bind(mash, 'space', switchWindowByKey)
--- hs.hotkey.bind(mash, 'up', focusWindowNorth)
--- hs.hotkey.bind(mash, 'down', focusWindowSouth)
--- hs.hotkey.bind(mash, 'right', focusWindowEast)
--- hs.hotkey.bind(mash, 'left', focusWindowWest)
 
 -----------------------------------------------
 -- Launcher
@@ -380,7 +345,7 @@ hs.hotkey.bind(cmd, 'f6', function() hs.application.launchOrFocus('sourcetree') 
 hs.hotkey.bind(cmd, 'f7', function() hs.application.launchOrFocus('iterm') end)
 hs.hotkey.bind(cmd, 'f8', function() hs.application.launchOrFocus('sublime text') end)
 hs.hotkey.bind(cmd, 'f9', function() hs.application.launchOrFocus('google chrome') end)
--- hs.hotkey.bind(cmd, 'f10', function() hs.application.launchOrFocus('whatsapp') end)
+hs.hotkey.bind(cmdShift, 'f9', function() hs.application.launchOrFocus('google chrome canary') end)
 
 -----------------------------------------------
 -- Reload config
