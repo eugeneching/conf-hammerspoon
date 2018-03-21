@@ -345,7 +345,7 @@ hs.hotkey.bind(cmd, 'f6', function() hs.application.launchOrFocus('sourcetree') 
 hs.hotkey.bind(cmd, 'f7', function() hs.application.launchOrFocus('iterm') end)
 hs.hotkey.bind(cmd, 'f8', function() hs.application.launchOrFocus('sublime text') end)
 hs.hotkey.bind(cmd, 'f9', function() hs.application.launchOrFocus('google chrome') end)
-hs.hotkey.bind(cmdShift, 'f9', function() hs.application.launchOrFocus('google chrome canary') end)
+hs.hotkey.bind(cmdShift, 'f9', function() hs.application.launchOrFocus('shift') end)
 
 -----------------------------------------------
 -- Reload config
