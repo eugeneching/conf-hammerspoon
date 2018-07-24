@@ -339,13 +339,31 @@ hs.hotkey.bind(mash, 'space', switchWindowByKey)
 -- Launcher
 -----------------------------------------------
 
-hs.hotkey.bind(cmd, 'f1', function() hs.application.launchOrFocus('slack') end)
-hs.hotkey.bind(cmd, 'f5', function() hs.application.launchOrFocus('path finder') end)
-hs.hotkey.bind(cmd, 'f6', function() hs.application.launchOrFocus('sourcetree') end)
-hs.hotkey.bind(cmd, 'f7', function() hs.application.launchOrFocus('iterm') end)
-hs.hotkey.bind(cmd, 'f8', function() hs.application.launchOrFocus('sublime text') end)
-hs.hotkey.bind(cmd, 'f9', function() hs.application.launchOrFocus('google chrome') end)
-hs.hotkey.bind(cmdShift, 'f9', function() hs.application.launchOrFocus('google chrome canary') end)
+function onlyShow(appName)
+    hs.application.launchOrFocus(appName)
+end
+
+function toggleShowHide(appName)
+    local app = hs.application.find(appName)
+    if app == nil then
+        return
+    end
+
+    if app:isHidden() == true then
+        hs.application.launchOrFocus(appName)
+    else
+        app:hide()
+    end
+end
+
+-- hs.hotkey.bind(cmd, 'f1', function() hs.application.launchOrFocus('slack') end)
+hs.hotkey.bind(cmd, 'f1', function() toggleShowHide('slack') end)
+hs.hotkey.bind(cmd, 'f5', function() onlyShow('path finder') end)
+hs.hotkey.bind(cmd, 'f6', function() onlyShow('sourcetree') end)
+hs.hotkey.bind(cmd, 'f7', function() onlyShow('iterm') end)
+hs.hotkey.bind(cmd, 'f8', function() onlyShow('sublime text') end)
+hs.hotkey.bind(cmd, 'f9', function() onlyShow('google chrome') end)
+hs.hotkey.bind(cmdShift, 'f9', function() onlyShow('google chrome canary') end)
 
 -----------------------------------------------
 -- Reload config
