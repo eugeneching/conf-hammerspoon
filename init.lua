@@ -359,7 +359,7 @@ end
 -- hs.hotkey.bind(cmd, 'f1', function() hs.application.launchOrFocus('slack') end)
 hs.hotkey.bind(cmd, 'f1', function() onlyShow('slack') end)
 hs.hotkey.bind(cmd, 'f5', function() onlyShow('path finder') end)
-hs.hotkey.bind(cmd, 'f6', function() onlyShow('tower') end)
+hs.hotkey.bind(cmd, 'f6', function() onlyShow('gitkraken') end)
 hs.hotkey.bind(cmd, 'f7', function() onlyShow('iterm') end)
 hs.hotkey.bind(cmd, 'f8', function() onlyShow('sublime text') end)
 hs.hotkey.bind(cmd, 'f9', function() onlyShow('google chrome') end)
