@@ -364,6 +364,7 @@ hs.hotkey.bind(cmd, 'f7', function() onlyShow('iterm') end)
 hs.hotkey.bind(cmd, 'f8', function() onlyShow('visual studio code') end)
 hs.hotkey.bind(cmd, 'f9', function() onlyShow('google chrome') end)
 hs.hotkey.bind(cmdShift, 'f9', function() onlyShow('brave browser') end)
+hs.hotkey.bind(cmd, 'f12', function() onlyShow('standard notes') end)
 
 -----------------------------------------------
 -- Reload config
