@@ -91,6 +91,23 @@ function moveFullScreen()
     end
 end
 
+function moveCenter()
+    local factor = 1.5
+
+    if hs.window.focusedWindow() then
+        local win = hs.window.focusedWindow()
+        local target = {
+            x = win:screen():frame().x,
+            y = win:screen():frame().y,
+            w = win:screen():frame().w/factor,
+            h = win:screen():frame().h/factor
+        }
+
+        move(target)
+        win:centerOnScreen()
+    end
+end
+
 function moveLeftHalf()
     local factor = 2
 
@@ -322,6 +339,7 @@ end
 -- Key bindings
 -----------------------------------------------
 
+hs.hotkey.bind(mash, 'k', moveCenter)
 hs.hotkey.bind(mash, 'i', moveFullScreen)
 hs.hotkey.bind(mash, 'h', moveLeftHalf)
 hs.hotkey.bind(mash, 'l', moveRightHalf)
