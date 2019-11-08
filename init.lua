@@ -18,7 +18,6 @@ require("hs.window")
 
 function isAlreadyAtPosition(target)
     local win = hs.window.focusedWindow()
-
     if
         math.abs(win:frame().x - target.x) <= 15 and
         math.abs(win:frame().y - target.y) <= 15 and
@@ -95,20 +94,34 @@ function moveFullScreen()
 end
 
 function moveCenter()
-    local factor = 1.33
+    local factors = {1.33, 1.5, 1.66}
+    local currentFactorIndex = 0
 
     if hs.window.focusedWindow() then
         local win = hs.window.focusedWindow()
-        local target = {
-            x = win:screen():frame().x,
-            y = win:screen():frame().y,
-            w = win:screen():frame().w/factor,
-            h = win:screen():frame().h/factor
-        }
+        local targets = {}
 
-        move(target)
-        win:centerOnScreen()
-    end
+        for i, factor in ipairs(factors) do
+            local target = {
+                x = (win:screen():frame().w - win:screen():frame().w/factor)/2,
+                y = (win:screen():frame().h - win:screen():frame().h/factor)/2,
+                w = win:screen():frame().w/factor,
+                h = win:screen():frame().h/factor
+            }
+
+            table.insert(targets, target)
+
+            if isAlreadyAtPosition(target) then
+                currentFactorIndex = i
+            end
+        end
+
+        if currentFactorIndex == #factors then
+            currentFactorIndex = 0
+        end
+
+        move(targets[currentFactorIndex+1])
+   end
 end
 
 function moveLeftHalf()
