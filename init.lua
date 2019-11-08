@@ -390,7 +390,6 @@ function toggleShowHide(appName)
     end
 end
 
--- hs.hotkey.bind(cmd, 'f1', function() hs.application.launchOrFocus('slack') end)
 hs.hotkey.bind(cmd, 'f1', function() onlyShow('slack') end)
 hs.hotkey.bind(cmd, 'f2', function() onlyShow('keybase') end)
 hs.hotkey.bind(cmd, 'f3', function() onlyShow('signal') end)
@@ -403,6 +402,7 @@ hs.hotkey.bind(cmd, 'f9', function() onlyShow('google chrome') end)
 hs.hotkey.bind(cmdShift, 'f9', function() onlyShow('brave browser') end)
 hs.hotkey.bind(cmd, 'f12', function() onlyShow('standard notes') end)
 
+
 -----------------------------------------------
 -- Reload config
 -----------------------------------------------
@@ -412,4 +412,3 @@ function reload_config(files)
 end
 hs.pathwatcher.new(os.getenv("HOME") .. "/.hammerspoon/", reload_config):start()
 hs.alert.show("config loaded")
-
