@@ -103,8 +103,8 @@ function moveCenter()
 
         for i, factor in ipairs(factors) do
             local target = {
-                x = (win:screen():frame().w - win:screen():frame().w/factor)/2,
-                y = (win:screen():frame().h - win:screen():frame().h/factor)/2,
+                x = win:screen():frame().x + (win:screen():frame().w - win:screen():frame().w/factor)/2,
+                y = win:screen():frame().y + (win:screen():frame().h - win:screen():frame().h/factor)/2,
                 w = win:screen():frame().w/factor,
                 h = win:screen():frame().h/factor
             }
