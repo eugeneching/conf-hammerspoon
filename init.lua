@@ -8,6 +8,9 @@ hs.window.animationDuration = 0
 require("hs.application")
 require("hs.window")
 
+-- require("hs.logger")
+-- local log = hs.logger.new('mymodule','debug')
+-- log.i("hello")
 
 -----------------------------------------------
 -- Utilities
