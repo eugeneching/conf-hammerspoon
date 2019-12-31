@@ -94,7 +94,7 @@ function moveFullScreen()
 end
 
 function moveCenter()
-    local factors = {1.33, 1.5, 1.66}
+    local factors = {1.33, 1.5, 1.66, 2}
     local currentFactorIndex = 0
 
     if hs.window.focusedWindow() then
