@@ -369,6 +369,8 @@ hs.hotkey.bind(mash, ']', growShrinkToRight)
 
 hs.hotkey.bind(mash, 'space', switchWindowByKey)
 
+hs.hotkey.bind(mash, "v", function() hs.eventtap.keyStrokes(hs.pasteboard.getContents()) end)
+
 -----------------------------------------------
 -- Launcher
 -----------------------------------------------
