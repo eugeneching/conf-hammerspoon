@@ -80,8 +80,6 @@ function move(target)
 end
 
 function moveFullScreen()
-    print("move full screen")
-
     if hs.window.focusedWindow() then
         local win = hs.window.focusedWindow()
         local target = {
@@ -96,8 +94,6 @@ function moveFullScreen()
 end
 
 function moveCenter()
-    print("move center")
-
     local factors = {1.33, 1.5, 1.66, 2}
     local currentFactorIndex = 0
 
@@ -129,8 +125,6 @@ function moveCenter()
 end
 
 function moveLeftHalf()
-    print("move left half")
-
     local factor = 2
 
     if hs.window.focusedWindow() then
@@ -157,8 +151,6 @@ function moveLeftHalf()
 end
 
 function moveRightHalf()
-    print("move right half")
-
     local factor = 2
 
     if hs.window.focusedWindow() then

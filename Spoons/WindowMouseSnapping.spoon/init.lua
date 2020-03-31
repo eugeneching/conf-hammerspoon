@@ -170,14 +170,9 @@ end
 function obj:onMouseUp()
     if self.isCurrentlyDragging then
         local mouse = hs.mouse.getAbsolutePosition()
-        -- local mouse = hs.mouse.getRelativePosition()
         local mouseCoords = hs.geometry.new({x = Math.round(mouse.x), y = Math.round(mouse.y)})
         local win = Window.getActiveWindow()
         local screenFrame = hs.mouse.getCurrentScreen():frame()
-
-        print("")
-        print("coords: X = " .. mouseCoords.x .. " Y = " .. mouseCoords.y)
-        print("frame: X = " .. screenFrame.x .. ", Y = " .. screenFrame.y .. ", H = " .. screenFrame.h .. ", W = " .. screenFrame.w)
 
         if not self.currentlyDraggedWindowFrame:equals(win:frame()) and Point.isAtEdge(mouseCoords, screenFrame, self.monitorEdgeSensitivity) then
             self:applySnap(win, mouseCoords, screenFrame)
