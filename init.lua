@@ -8,9 +8,9 @@ hs.window.animationDuration = 0
 require("hs.application")
 require("hs.window")
 
--- require("hs.logger")
--- local log = hs.logger.new('mymodule','debug')
--- log.i("hello")
+require("hs.logger")
+local log = hs.logger.new('mymodule','debug')
+log.i("hello")
 
 -----------------------------------------------
 -- Utilities
@@ -80,6 +80,8 @@ function move(target)
 end
 
 function moveFullScreen()
+    print("move full screen")
+
     if hs.window.focusedWindow() then
         local win = hs.window.focusedWindow()
         local target = {
@@ -94,6 +96,8 @@ function moveFullScreen()
 end
 
 function moveCenter()
+    print("move center")
+
     local factors = {1.33, 1.5, 1.66, 2}
     local currentFactorIndex = 0
 
@@ -125,6 +129,8 @@ function moveCenter()
 end
 
 function moveLeftHalf()
+    print("move left half")
+
     local factor = 2
 
     if hs.window.focusedWindow() then
@@ -151,6 +157,8 @@ function moveLeftHalf()
 end
 
 function moveRightHalf()
+    print("move right half")
+
     local factor = 2
 
     if hs.window.focusedWindow() then
@@ -343,6 +351,11 @@ function growShrinkToRight()
 end
 
 
+
+
+
+
+
 -----------------------------------------------
 -- Window focus switcher
 -----------------------------------------------
@@ -414,3 +427,21 @@ function reload_config(files)
 end
 hs.pathwatcher.new(os.getenv("HOME") .. "/.hammerspoon/", reload_config):start()
 hs.alert.show("config loaded")
+
+
+local spoons = {
+    -- ConfigReloader = true,
+    -- WindowGridSnapping = true,
+    WindowMouseSnapping = true,
+    -- AppLauncher = true
+    --SpacesManagement = false
+}
+
+for spoonName, enabled in pairs(spoons) do
+    if enabled then
+        hs.loadSpoon(spoonName)
+        spoon[spoonName].start(spoon[spoonName])
+        spoon[spoonName].bindHotkeys(spoon[spoonName], hyper)
+        spoon[spoonName].bindMouseEvents(spoon[spoonName])
+    end
+end
