@@ -1,39 +1,24 @@
--- Load Dependencies
 local BaseSpoon = require "Util/BaseSpoon"
 local Window    = require "Util/Window"
 local Point     = require "Util/Point"
 local Math     = require "Util/Math"
-
--- Spoon Container Object
 local obj = BaseSpoon.new()
 
--- Spoon Metadata
 obj.name = "WindowMouseSnapping"
 obj.version = "1.0"
-obj.author = "Mike Trpcic"
+obj.author = "Eugene Ching"
 
--- Hotkey Definition (All keys inherit hyper)
-obj.hotkeys = {
-    primary = {},
-    secondary = {
-        -- M = "stop"
-    }
-}
-
--- Mouse Event Mapping
 obj.mouseEvents = {
     ['leftMouseDragged'] = "onMouseDrag",
     ['leftMouseUp'] = "onMouseUp"
 }
 
--- Internal variables
 obj.activeEvents = {}
 obj.windowTitlebarHeight = 21
 obj.monitorEdgeSensitivity = 100
-
-obj.isCurrentlyDragging = false
-obj.currentlyDraggedWindow = nil
-obj.currentlyDraggedWindowFrame = nil
+obj.isDragging = false
+obj.draggedWin = nil
+obj.draggedWinFrame = nil
 
 function moveFullScreenMouse()
     if hs.window.focusedWindow() then
@@ -148,7 +133,7 @@ end
 
 -- Method to be called when a mouse drag event
 function obj:onMouseDrag()
-    if not self.isCurrentlyDragging then
+    if not self.isDragging then
         local win = Window.getActiveWindow()
 
         if win ~= nil then
@@ -157,9 +142,9 @@ function obj:onMouseDrag()
             local winFrame = win:frame()
 
             if mouseCoords:inside(winFrame) then
-                self.isCurrentlyDragging = true
-                self.currentlyDraggedWindow = win
-                self.currentlyDraggedWindowFrame = winFrame
+                self.isDragging = true
+                self.draggedWin = win
+                self.draggedWinFrame = winFrame
             end
         end
     end
@@ -168,18 +153,18 @@ end
 -- Method to be called when the mouse "click" is released. This method is a no-op
 -- unless we previously recorded that the mouse was dragging.
 function obj:onMouseUp()
-    if self.isCurrentlyDragging then
+    if self.isDragging then
         local mouse = hs.mouse.getAbsolutePosition()
         local mouseCoords = hs.geometry.new({x = Math.round(mouse.x), y = Math.round(mouse.y)})
         local win = Window.getActiveWindow()
         local screenFrame = hs.mouse.getCurrentScreen():frame()
 
-        if not self.currentlyDraggedWindowFrame:equals(win:frame()) and Point.isAtEdge(mouseCoords, screenFrame, self.monitorEdgeSensitivity) then
+        if not self.draggedWinFrame:equals(win:frame()) and Point.isAtEdge(mouseCoords, screenFrame, self.monitorEdgeSensitivity) then
             self:applySnap(win, mouseCoords, screenFrame)
         end
     end
-    self.isCurrentlyDragging = false
-    self.currentlyDraggedWindow = nil
+    self.isDragging = false
+    self.draggedWin = nil
     self.currentMousePositionInWindow = nil
 end
 
