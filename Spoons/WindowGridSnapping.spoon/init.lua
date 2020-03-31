@@ -1,168 +1,349 @@
--- Load Dependencies
 local BaseSpoon = require "Util/BaseSpoon"
 local Window    = require "Util/Window"
-
--- Spoon Container Object
 local obj = BaseSpoon.new()
 
--- Spoon Metadata
 obj.name = "WindowGradSnapping"
 obj.version = "1.0"
-obj.author = "Mike Trpcic"
+obj.author = "Eugene Ching"
 
--- Spoon Configuration Variables
-obj.grid = {
-    rows = 3,
-    columns = 4,
-    margins = 0
-}
-
-obj.centerSize = {
-    w = 1000,
-    h = 600
-}
-
--- Hotkey Definition (All keys inherit hyper)
-obj.hotkeys = {
-    primary = {
-        left  = "flexLeft",
-        right = "flexRight",
-        up    = "flexUp",
-        down  = "flexDown",
-        M     = "maximize",
-        S     = "snap",
-        N     = "nextScreen",
-        P     = "prevScreen",
-        C     = "center"
-    },
-
-    secondary = {
-        left  = "moveLeft",
-        right = "moveRight",
-        up    = "moveUp",
-        down  = "moveDown",
-        S     = "snapAll",
-    }
-}
+obj.hotkeys = {}
 
 obj.replaceFullscreenWithMaximize = false
 
--- Spoon Methods
-
-function obj:maximize()
-    hs.window.maximize(Window.getActiveWindow())
-end
-
-function obj.snap()
-    hs.grid.snap(Window.getActiveWindow())
-    Window.ensureOnScreen(win)
-end
-
-function obj.snapAll()
-    local wins = hs.window.visibleWindows()
-    for i,win in ipairs(wins) do
-        hs.grid.snap(win)
-        Window.ensureOnScreen(win)
-    end
-end
-
-function obj:flexLeft()
-    local win = Window.getActiveWindow()
-    if Window.isAtLeft(win, self.grid.margins) then
-        hs.grid.resizeWindowThinner(win)
+function isAlreadyAtPosition(target)
+    local win = hs.window.focusedWindow()
+    if
+        math.abs(win:frame().x - target.x) <= 15 and
+        math.abs(win:frame().y - target.y) <= 15 and
+        math.abs(win:frame().w - target.w) <= 15 and
+        math.abs(win:frame().h - target.h) <= 15
+    then
+        return true
     else
-        self:moveLeft()
-        hs.grid.resizeWindowWider(win)
+        return false
     end
 end
 
-function obj:flexRight()
-    local win = Window.getActiveWindow()
-    if Window.isAtRight(win, self.grid.margins) then
-        hs.grid.resizeWindowThinner(win)
-        self:moveRight()
+function flip(originX, factor, screen)
+    if originX == screen:frame().x then
+        return screen:frame().x + (factor - 1) * screen:frame().w/factor
     else
-        hs.grid.resizeWindowWider(win)
+        return screen:frame().x
     end
 end
 
-function obj:flexUp()
-    local win = Window.getActiveWindow()
-    if Window.isAtTop(win, self.grid.margins) then
-        hs.grid.resizeWindowShorter(win)
-    else
-        self:moveUp()
-        hs.grid.resizeWindowTaller(win)
+function isWindowMaximized(win)
+    if win:frame().x == win:screen():frame().x and win:frame().x + win:frame().w == win:screen():frame().w then
+        return true
+    end
+
+    return false
+end
+
+function isTetheredToLeftEdge(win)
+    if win:frame().x == win:screen():frame().x then
+        return true
+    end
+
+    return false
+end
+
+function isTetheredToRightEdge(win)
+    if win:frame().x + win:frame().w == win:screen():frame().w then
+        return true
+    end
+
+    return false
+end
+
+function move(target)
+    local win = hs.window.focusedWindow()
+    local newFrame = win:frame()
+
+    newFrame.x = target.x
+    newFrame.y = target.y
+    newFrame.w = target.w
+    newFrame.h = target.h
+
+    win:setFrame(newFrame)
+end
+
+function moveFullScreen()
+    if hs.window.focusedWindow() then
+        local win = hs.window.focusedWindow()
+        local target = {
+            x = win:screen():frame().x,
+            y = win:screen():frame().y,
+            w = win:screen():frame().w,
+            h = win:screen():frame().h
+        }
+
+        move(target)
     end
 end
 
-function obj:flexDown()
-    local win = Window.getActiveWindow()
-    if Window.isAtBottom(win, self.grid.margins) then
-        hs.grid.resizeWindowShorter(win)
-        self:moveDown()
-    else
-        hs.grid.resizeWindowTaller(win)
+function moveCenter()
+    local factors = {1.33, 1.5, 1.66, 2}
+    local currentFactorIndex = 0
+
+    if hs.window.focusedWindow() then
+        local win = hs.window.focusedWindow()
+        local targets = {}
+
+        for i, factor in ipairs(factors) do
+            local target = {
+                x = win:screen():frame().x + (win:screen():frame().w - win:screen():frame().w/factor)/2,
+                y = win:screen():frame().y + (win:screen():frame().h - win:screen():frame().h/factor)/2,
+                w = win:screen():frame().w/factor,
+                h = win:screen():frame().h/factor
+            }
+
+            table.insert(targets, target)
+
+            if isAlreadyAtPosition(target) then
+                currentFactorIndex = i
+            end
+        end
+
+        if currentFactorIndex == #factors then
+            currentFactorIndex = 0
+        end
+
+        move(targets[currentFactorIndex+1])
+   end
+end
+
+function moveLeftHalf()
+    local factor = 2
+
+    if hs.window.focusedWindow() then
+        local win = hs.window.focusedWindow()
+        local target = {
+            x = win:screen():frame().x,
+            y = win:screen():frame().y,
+            w = win:screen():frame().w/factor,
+            h = win:screen():frame().h
+        }
+
+        if isAlreadyAtPosition(target) then
+            local nextScreen = win:screen():previous()
+            target = {
+                x = flip(nextScreen:frame().x, factor, nextScreen),
+                y = nextScreen:frame().y,
+                w = nextScreen:frame().w/factor,
+                h = nextScreen:frame().h
+            }
+        end
+
+        move(target)
     end
 end
 
-function obj:moveLeft()
-    hs.grid.pushWindowLeft(Window.getActiveWindow())
+function moveRightHalf()
+    local factor = 2
+
+    if hs.window.focusedWindow() then
+        local win = hs.window.focusedWindow()
+        local target = {
+            x = win:screen():frame().x + win:screen():frame().w/factor,
+            y = win:screen():frame().y,
+            w = win:screen():frame().w/factor,
+            h = win:screen():frame().h
+        }
+
+        if isAlreadyAtPosition(target) then
+            local nextScreen = win:screen():next()
+            target = {
+                x = flip(nextScreen:frame().x + nextScreen:frame().w/factor, factor, nextScreen),
+                y = nextScreen:frame().y,
+                w = nextScreen:frame().w/factor,
+                h = nextScreen:frame().h
+            }
+        end
+
+        move(target)
+    end
 end
 
-function obj:moveRight()
-    local win = Window.getActiveWindow()
-    hs.grid.pushWindowRight(win)
-    Window.ensureOnScreen(win)
+function moveLeftUpQuarter()
+    local factor = 2
+
+    if hs.window.focusedWindow() then
+        local win = hs.window.focusedWindow()
+        local target = {
+            x = win:screen():frame().x,
+            y = win:screen():frame().y,
+            w = win:screen():frame().w/factor,
+            h = win:screen():frame().h/factor
+        }
+
+        if isAlreadyAtPosition(target) then
+            local nextScreen = win:screen():previous()
+            target = {
+                x = flip(nextScreen:frame().x, factor, nextScreen),
+                y = nextScreen:frame().y,
+                w = nextScreen:frame().w/factor,
+                h = nextScreen:frame().h/factor
+            }
+        end
+
+        move(target)
+    end
 end
 
-function obj:moveUp()
-    hs.grid.pushWindowUp(Window.getActiveWindow())
+function moveLeftDownQuarter()
+    local factor = 2
+
+    if hs.window.focusedWindow() then
+        local win = hs.window.focusedWindow()
+        local target = {
+            x = win:screen():frame().x,
+            y = win:screen():frame().y + win:screen():frame().h/factor,
+            w = win:screen():frame().w/factor,
+            h = win:screen():frame().h/factor
+        }
+
+        if isAlreadyAtPosition(target) then
+            local nextScreen = win:screen():previous()
+            target = {
+                x = flip(nextScreen:frame().x, factor, nextScreen),
+                y = win:screen():frame().y + win:screen():frame().h/factor,
+                w = nextScreen:frame().w/factor,
+                h = nextScreen:frame().h/factor
+            }
+        end
+
+        move(target)
+    end
 end
 
-function obj:moveDown()
-    local win = Window.getActiveWindow()
-    hs.grid.pushWindowDown(win)
-    Window.ensureOnScreen(win)
+
+function moveRightUpQuarter()
+    local factor = 2
+
+    if hs.window.focusedWindow() then
+        local win = hs.window.focusedWindow()
+        local target = {
+            x = win:screen():frame().x + win:screen():frame().w/factor,
+            y = win:screen():frame().y,
+            w = win:screen():frame().w/factor,
+            h = win:screen():frame().h/factor
+        }
+
+        if isAlreadyAtPosition(target) then
+            local nextScreen = win:screen():next()
+            target = {
+                x = flip(nextScreen:frame().x + win:screen():frame().w/factor, factor, nextScreen),
+                y = nextScreen:frame().y,
+                w = nextScreen:frame().w/factor,
+                h = nextScreen:frame().h/factor
+            }
+        end
+
+        move(target)
+    end
 end
 
-function obj:nextScreen()
-    local win = Window.getActiveWindow()
-    win:moveToScreen(win:screen():next())
+function moveRightDownQuarter()
+    local factor = 2
+
+    if hs.window.focusedWindow() then
+        local win = hs.window.focusedWindow()
+        local target = {
+            x = win:screen():frame().x + win:screen():frame().w/factor,
+            y = win:screen():frame().y + win:screen():frame().h/factor,
+            w = win:screen():frame().w/factor,
+            h = win:screen():frame().h/factor
+        }
+
+        if isAlreadyAtPosition(target) then
+            local nextScreen = win:screen():next()
+            target = {
+                x = flip(nextScreen:frame().x + win:screen():frame().w/factor, factor, nextScreen),
+                y = win:screen():frame().y + win:screen():frame().h/factor,
+                w = nextScreen:frame().w/factor,
+                h = nextScreen:frame().h/factor
+            }
+        end
+
+        move(target)
+    end
 end
 
-function obj:prevScreen()
-    local win = Window.getActiveWindow()
-    win:moveToScreen(win:screen():previous())
+function growShrinkToLeft()
+    local factor = 6
+
+    if hs.window.focusedWindow() then
+        local win = hs.window.focusedWindow()
+        local newFrame = win:frame()
+        local delta = win:screen():frame().w / factor
+
+        if isWindowMaximized(win) then
+            -- Window is maximized, shrink right edge
+            newFrame.w = newFrame.w - delta
+
+        elseif isTetheredToLeftEdge(win) then
+            -- Window is on left-edge, shrink right edge
+            newFrame.w = newFrame.w - delta
+
+        elseif isTetheredToRightEdge(win) then
+            -- Window is on right-edge, grow left edge
+            newFrame.x = newFrame.x - delta
+            newFrame.w = newFrame.w + delta
+
+        else
+            -- Do nothing
+            return
+        end
+
+        win:setFrame(newFrame)
+    end
 end
 
-function obj:center()
-    local win = Window.getActiveWindow()
-    local screenFrame = win:screen():frame()
-    local newWinFrame = hs.geometry.copy(win:frame())
+function growShrinkToRight()
+    local factor = 6
 
-    newWinFrame.h = self.centerSize.h
-    newWinFrame.w = self.centerSize.w
-    newWinFrame.x = (screenFrame.w / 2) - (newWinFrame.w / 2)
-    newWinFrame.y = (screenFrame.h / 2) - (newWinFrame.h / 2)
+    if hs.window.focusedWindow() then
+        local win = hs.window.focusedWindow()
+        local newFrame = win:frame()
+        local delta = win:screen():frame().w / factor
 
-    win:move(newWinFrame):setSize(newWinFrame):setFrame(newWinFrame)
-end
+        if isWindowMaximized(win) then
+            -- Window is maximized, shrink left edge
+            newFrame.x = newFrame.x + delta
+            newFrame.w = newFrame.w - delta
 
-function obj:bindFullScreenMaximize()
-    hs.window.filter.default:subscribe("windowFullscreened", function(win, appName, evt)
-        Window.maximize(win:setFullScreen(false))
-    end, true)
-end
+        elseif isTetheredToLeftEdge(win) then
+            -- Window is on left-edge, grow right edge
+            newFrame.w = newFrame.w + delta
 
-function obj:unbindFullscreenMaximize()
-    hs.window.filter.default.unsubscribe("windowFullscreened")
+        elseif isTetheredToRightEdge(win) then
+            -- Window is on right-edge, shrink left edge
+            newFrame.x = newFrame.x + delta
+            newFrame.w = newFrame.w - delta
+
+        else
+            -- Do nothing
+            return
+        end
+
+        win:setFrame(newFrame)
+    end
 end
 
 function obj:start()
-    hs.grid.setGrid(self.grid.columns .. "x" .. self.grid.rows)
-    hs.grid.setMargins(self.grid.margins .. "x" ..self.grid.margins)
-    hs.window.animationDuration = 0
+    hs.hotkey.bind(hyper.primary, 'k', moveCenter)
+    hs.hotkey.bind(hyper.primary, 'i', moveFullScreen)
+    hs.hotkey.bind(hyper.primary, 'h', moveLeftHalf)
+    hs.hotkey.bind(hyper.primary, 'l', moveRightHalf)
+    hs.hotkey.bind(hyper.primary, 'y', moveLeftUpQuarter)
+    hs.hotkey.bind(hyper.primary, 'n', moveLeftDownQuarter)
+    hs.hotkey.bind(hyper.primary, 'p', moveRightUpQuarter)
+    hs.hotkey.bind(hyper.primary, '.', moveRightDownQuarter)
+    hs.hotkey.bind(hyper.primary, '[', growShrinkToLeft)
+    hs.hotkey.bind(hyper.primary, ']', growShrinkToRight)
+    hs.hotkey.bind(hyper.primary, 'space', switchWindowByKey)
+    hs.hotkey.bind(hyper.primary, "v", function() hs.eventtap.keyStrokes(hs.pasteboard.getContents()) end)
 
     if self.replaceFullscreenWithMaximize then
         self:bindFullScreenMaximize()
@@ -173,7 +354,6 @@ function obj:stop()
     if self.replaceFullscreenWithMaximize then
         self:unbindFullscreenMaximize()
     end
-
 end
 
 return obj
