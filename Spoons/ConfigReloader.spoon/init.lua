@@ -8,7 +8,7 @@ local obj = BaseSpoon.new()
 -- Spoon Metadata
 obj.name = "ConfigReloader"
 obj.version = "1.0"
-obj.author = "Mike Trpcic"
+obj.author = "Eugene Ching"
 
 -- Spoon Configuration Variables
 obj.config_path = hs.configdir
