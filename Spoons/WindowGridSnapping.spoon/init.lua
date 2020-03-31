@@ -5,9 +5,6 @@ local obj = BaseSpoon.new()
 obj.name = "WindowGradSnapping"
 obj.version = "1.0"
 obj.author = "Eugene Ching"
-
-obj.hotkeys = {}
-
 obj.replaceFullscreenWithMaximize = false
 
 function isAlreadyAtPosition(target)
