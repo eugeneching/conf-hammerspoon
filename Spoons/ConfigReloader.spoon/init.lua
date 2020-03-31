@@ -1,30 +1,13 @@
--- Load Dependencies
 local BaseSpoon = require "Util/BaseSpoon"
 local Window    = require "Util/Window"
-
--- Spoon Container Object
 local obj = BaseSpoon.new()
 
--- Spoon Metadata
 obj.name = "ConfigReloader"
 obj.version = "1.0"
 obj.author = "Eugene Ching"
-
--- Spoon Configuration Variables
 obj.config_path = hs.configdir
-
--- Hotkey Definition
-obj.hotkeys = {
-    primary = {
-        R = "reloadConfig"
-    },
-    secondary = {}
-}
-
--- Spoon Locals
 obj.watcher = nil
 
--- Spoon Methods
 function obj:bindHotkeys(hyper)
     local hyper_types = {"primary", "secondary"}
     local def = {}
@@ -46,6 +29,8 @@ function obj:reloadConfig()
 end
 
 function obj:start()
+    hs.hotkey.bind({"ctrl", "option", "cmd"}, 'r', self.reloadConfig)
+
     local function reload()
         self:reloadConfig()
     end
