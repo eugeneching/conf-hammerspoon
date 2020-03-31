@@ -18,10 +18,7 @@ obj.hotkeys = {
     primary = {
         R = "reloadConfig"
     },
-
-    secondary = {
-
-    }
+    secondary = {}
 }
 
 -- Spoon Locals

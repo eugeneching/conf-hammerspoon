@@ -1,16 +1,15 @@
 local cmd = {"cmd"}
 local cmdShift = {"cmd", "shift"}
-local mash = {"cmd", "alt", "ctrl"}
-local hyper = {"cmd", "alt", "ctrl", "shift"}
+local hyper = {
+    primary = {"cmd", "alt", "ctrl"},
+    secondary = {"cmd", "alt", "ctrl", "shift"},
+    cmd = {"cmd"},
+}
 
 hs.window.animationDuration = 0
 
 require("hs.application")
 require("hs.window")
-
-require("hs.logger")
-local log = hs.logger.new('mymodule','debug')
-log.i("hello")
 
 -----------------------------------------------
 -- Utilities
@@ -360,21 +359,21 @@ end
 -- Key bindings
 -----------------------------------------------
 
-hs.hotkey.bind(mash, 'k', moveCenter)
-hs.hotkey.bind(mash, 'i', moveFullScreen)
-hs.hotkey.bind(mash, 'h', moveLeftHalf)
-hs.hotkey.bind(mash, 'l', moveRightHalf)
-hs.hotkey.bind(mash, 'y', moveLeftUpQuarter)
-hs.hotkey.bind(mash, 'n', moveLeftDownQuarter)
-hs.hotkey.bind(mash, 'p', moveRightUpQuarter)
-hs.hotkey.bind(mash, '.', moveRightDownQuarter)
+hs.hotkey.bind(hyper.primary, 'k', moveCenter)
+hs.hotkey.bind(hyper.primary, 'i', moveFullScreen)
+hs.hotkey.bind(hyper.primary, 'h', moveLeftHalf)
+hs.hotkey.bind(hyper.primary, 'l', moveRightHalf)
+hs.hotkey.bind(hyper.primary, 'y', moveLeftUpQuarter)
+hs.hotkey.bind(hyper.primary, 'n', moveLeftDownQuarter)
+hs.hotkey.bind(hyper.primary, 'p', moveRightUpQuarter)
+hs.hotkey.bind(hyper.primary, '.', moveRightDownQuarter)
 
-hs.hotkey.bind(mash, '[', growShrinkToLeft)
-hs.hotkey.bind(mash, ']', growShrinkToRight)
+hs.hotkey.bind(hyper.primary, '[', growShrinkToLeft)
+hs.hotkey.bind(hyper.primary, ']', growShrinkToRight)
 
-hs.hotkey.bind(mash, 'space', switchWindowByKey)
+hs.hotkey.bind(hyper.primary, 'space', switchWindowByKey)
 
-hs.hotkey.bind(mash, "v", function() hs.eventtap.keyStrokes(hs.pasteboard.getContents()) end)
+hs.hotkey.bind(hyper.primary, "v", function() hs.eventtap.keyStrokes(hs.pasteboard.getContents()) end)
 
 -----------------------------------------------
 -- Launcher
@@ -409,20 +408,8 @@ hs.hotkey.bind(cmd, 'f9', function() onlyShow('google chrome') end)
 hs.hotkey.bind(cmdShift, 'f9', function() onlyShow('brave browser') end)
 hs.hotkey.bind(cmd, 'f12', function() onlyShow('standard notes') end)
 
-
------------------------------------------------
--- Reload config
------------------------------------------------
-
-function reload_config(files)
-    hs.reload()
-end
-hs.pathwatcher.new(os.getenv("HOME") .. "/.hammerspoon/", reload_config):start()
-hs.alert.show("config loaded")
-
-
 local spoons = {
-    -- ConfigReloader = true,
+    ConfigReloader = true,
     -- WindowGridSnapping = true,
     WindowMouseSnapping = true,
     -- AppLauncher = true

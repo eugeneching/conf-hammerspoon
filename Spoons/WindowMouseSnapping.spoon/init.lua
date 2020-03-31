@@ -8,7 +8,7 @@ local Math     = require "Util/Math"
 local obj = BaseSpoon.new()
 
 -- Spoon Metadata
-obj.name = "ConfigReloader"
+obj.name = "WindowMouseSnapping"
 obj.version = "1.0"
 obj.author = "Mike Trpcic"
 

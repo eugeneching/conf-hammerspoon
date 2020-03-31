@@ -18,12 +18,9 @@ obj.config_path = hs.configdir
 -- Map each hotkey directly to the Application name that should be called
 obj.hotkeys = {
     primary = {
-        T = "iTerm"
+        T = "iTerm",
     },
-
-    secondary = {
-
-    }
+    secondary = {}
 }
 
 -- Spoon Locals
