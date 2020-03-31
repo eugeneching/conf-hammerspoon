@@ -341,12 +341,6 @@ function growShrinkToRight()
     end
 end
 
-
-
-
-
-
-
 -----------------------------------------------
 -- Window focus switcher
 -----------------------------------------------
@@ -367,52 +361,17 @@ hs.hotkey.bind(hyper.primary, 'y', moveLeftUpQuarter)
 hs.hotkey.bind(hyper.primary, 'n', moveLeftDownQuarter)
 hs.hotkey.bind(hyper.primary, 'p', moveRightUpQuarter)
 hs.hotkey.bind(hyper.primary, '.', moveRightDownQuarter)
-
 hs.hotkey.bind(hyper.primary, '[', growShrinkToLeft)
 hs.hotkey.bind(hyper.primary, ']', growShrinkToRight)
-
 hs.hotkey.bind(hyper.primary, 'space', switchWindowByKey)
-
 hs.hotkey.bind(hyper.primary, "v", function() hs.eventtap.keyStrokes(hs.pasteboard.getContents()) end)
 
------------------------------------------------
--- Launcher
------------------------------------------------
-
-function onlyShow(appName)
-    hs.application.launchOrFocus(appName)
-end
-
-function toggleShowHide(appName)
-    local app = hs.application.find(appName)
-    if app == nil then
-        return
-    end
-
-    if app:isHidden() == true then
-        hs.application.launchOrFocus(appName)
-    else
-        app:hide()
-    end
-end
-
-hs.hotkey.bind(cmd, 'f1', function() onlyShow('slack') end)
-hs.hotkey.bind(cmd, 'f2', function() onlyShow('keybase') end)
-hs.hotkey.bind(cmd, 'f3', function() onlyShow('signal') end)
-hs.hotkey.bind(cmd, 'f4', function() onlyShow('numi') end)
-hs.hotkey.bind(cmd, 'f5', function() onlyShow('path finder') end)
-hs.hotkey.bind(cmd, 'f6', function() onlyShow('gitkraken') end)
-hs.hotkey.bind(cmd, 'f7', function() onlyShow('iterm') end)
-hs.hotkey.bind(cmd, 'f8', function() onlyShow('visual studio code') end)
-hs.hotkey.bind(cmd, 'f9', function() onlyShow('google chrome') end)
-hs.hotkey.bind(cmdShift, 'f9', function() onlyShow('brave browser') end)
-hs.hotkey.bind(cmd, 'f12', function() onlyShow('standard notes') end)
 
 local spoons = {
     ConfigReloader = true,
     -- WindowGridSnapping = true,
     WindowMouseSnapping = true,
-    -- AppLauncher = true
+    AppLauncher = true
     --SpacesManagement = false
 }
 
