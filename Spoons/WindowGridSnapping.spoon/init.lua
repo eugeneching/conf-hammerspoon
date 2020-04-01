@@ -339,7 +339,6 @@ function obj:start()
     hs.hotkey.bind({"ctrl", "option", "cmd"}, '.', moveRightDownQuarter)
     hs.hotkey.bind({"ctrl", "option", "cmd"}, '[', growShrinkToLeft)
     hs.hotkey.bind({"ctrl", "option", "cmd"}, ']', growShrinkToRight)
-    hs.hotkey.bind({"ctrl", "option", "cmd"}, 'space', switchWindowByKey)
     hs.hotkey.bind({"ctrl", "option", "cmd"}, "v", function() hs.eventtap.keyStrokes(hs.pasteboard.getContents()) end)
 
     if self.replaceFullscreenWithMaximize then
