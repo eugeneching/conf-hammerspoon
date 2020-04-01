@@ -1,7 +1,5 @@
 hs.window.animationDuration = 0
 
-function nop() end
-
 local spoons = {
     ConfigReloader = true,
     WindowGridSnapping = true,
