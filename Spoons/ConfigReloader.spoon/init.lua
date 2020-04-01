@@ -25,7 +25,9 @@ end
 
 function obj:reloadConfig()
     hs.reload()
-    hs.notify.new({title="Hammerspoon Config Reloaded"}):send()
+    print("")
+    print("[*] Config reloaded")
+    -- hs.notify.new({title="Hammerspoon Config Reloaded"}):send()
 end
 
 function obj:start()
@@ -34,6 +36,7 @@ function obj:start()
     local function reload()
         self:reloadConfig()
     end
+
     self.watcher = hs.pathwatcher.new(self.config_path, self.reloadConfig):start()
 end
 
