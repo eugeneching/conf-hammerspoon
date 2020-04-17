@@ -124,6 +124,9 @@ function moveLeftHalf()
 
         if isAlreadyAtPosition(target) then
             local nextScreen = win:screen():toWest()
+            if not nextScreen then
+                return
+            end
             target = {
                 x = flip(nextScreen:frame().x, factor, nextScreen),
                 y = nextScreen:frame().y,
@@ -150,6 +153,9 @@ function moveRightHalf()
 
         if isAlreadyAtPosition(target) then
             local nextScreen = win:screen():toEast()
+            if not nextScreen then
+                return
+            end
             target = {
                 x = flip(nextScreen:frame().x + nextScreen:frame().w/factor, factor, nextScreen),
                 y = nextScreen:frame().y,
