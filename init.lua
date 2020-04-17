@@ -3,7 +3,7 @@ hs.window.animationDuration = 0
 local spoons = {
     ConfigReloader = true,
     WindowGridSnapping = true,
-    WindowMouseSnapping = true,
+    WindowMouseSnapping = false,
     AppLauncher = true
 }
 
