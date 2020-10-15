@@ -20,7 +20,7 @@ function obj:start()
     hs.hotkey.bind({"cmd"}, 'f7', function() self.onlyShow('iterm') end)
     hs.hotkey.bind({"cmd"}, 'f8', function() self.onlyShow('visual studio code') end)
     hs.hotkey.bind({"cmd"}, 'f9', function() self.onlyShow('google chrome') end)
-    hs.hotkey.bind({"cmd", "shift"}, 'f9', function() self.onlyShow('microsoft edge') end)
+    hs.hotkey.bind({"cmd", "shift"}, 'f9', function() self.onlyShow('google chrome canary') end)
     hs.hotkey.bind({"cmd"}, 'f12', function() self.onlyShow('inkdrop') end)
 end
 
