@@ -273,6 +273,30 @@ function moveRightDownQuarter()
     end
 end
 
+function moveLeftMonitor()
+    local factor = 1
+
+    if hs.window.focusedWindow() then
+        local win = hs.window.focusedWindow()
+        local prevScreen = win:screen():previous()
+
+        win:moveToScreen(prevScreen, false, true)
+    end
+
+end
+
+function moveRightMonitor()
+    local factor = 1
+
+    if hs.window.focusedWindow() then
+        local win = hs.window.focusedWindow()
+        local nextScreen = win:screen():next()
+
+        win:moveToScreen(nextScreen, false, true)
+    end
+
+end
+
 function growShrinkToLeft()
     local factor = 6
 
@@ -347,8 +371,8 @@ function obj:start()
     hs.hotkey.bind({"ctrl", "option", "cmd"}, 'n', moveLeftDownQuarter)
     hs.hotkey.bind({"ctrl", "option", "cmd"}, 'p', moveRightUpQuarter)
     hs.hotkey.bind({"ctrl", "option", "cmd"}, '.', moveRightDownQuarter)
-    hs.hotkey.bind({"ctrl", "option", "cmd"}, '[', growShrinkToLeft)
-    hs.hotkey.bind({"ctrl", "option", "cmd"}, ']', growShrinkToRight)
+    hs.hotkey.bind({"ctrl", "option", "cmd"}, '[', moveLeftMonitor)
+    hs.hotkey.bind({"ctrl", "option", "cmd"}, ']', moveRightMonitor)
     hs.hotkey.bind({"ctrl", "option", "cmd"}, "v", function() hs.eventtap.keyStrokes(hs.pasteboard.getContents()) end)
 
     if self.replaceFullscreenWithMaximize then
