@@ -18,7 +18,8 @@ function obj:start()
     hs.hotkey.bind({"cmd"}, 'f9', function() hs.application.launchOrFocus('google chrome') end)
     hs.hotkey.bind({"cmd", "shift"}, 'f9', function() hs.application.launchOrFocus('google chrome canary') end)
     hs.hotkey.bind({"cmd"}, 'f12', function() hs.application.launchOrFocus('notion') end)
-    hs.hotkey.bind({}, 'f15', function() hs.application.launchOrFocusByBundleID("com.culturedcode.ThingsMac") end)
+    -- hs.hotkey.bind({}, 'f15', function() hs.application.launchOrFocusByBundleID("todoist") end)
+    -- hs.hotkey.bind({}, 'f15', function() hs.application.launchOrFocusByBundleID("com.culturedcode.ThingsMac") end)
 end
 
 return obj
