@@ -181,7 +181,7 @@ function moveLeftUpQuarter()
         }
 
         if isAlreadyAtPosition(target) then
-            local nextScreen = win:screen():previous()
+            local nextScreen = win:screen():toWest()
             target = {
                 x = flip(nextScreen:frame().x, factor, nextScreen),
                 y = nextScreen:frame().y,
@@ -207,7 +207,7 @@ function moveLeftDownQuarter()
         }
 
         if isAlreadyAtPosition(target) then
-            local nextScreen = win:screen():previous()
+            local nextScreen = win:screen():toWest()
             target = {
                 x = flip(nextScreen:frame().x, factor, nextScreen),
                 y = win:screen():frame().y + win:screen():frame().h/factor,
@@ -234,7 +234,7 @@ function moveRightUpQuarter()
         }
 
         if isAlreadyAtPosition(target) then
-            local nextScreen = win:screen():next()
+            local nextScreen = win:screen():toEast()
             target = {
                 x = flip(nextScreen:frame().x + win:screen():frame().w/factor, factor, nextScreen),
                 y = nextScreen:frame().y,
@@ -260,7 +260,7 @@ function moveRightDownQuarter()
         }
 
         if isAlreadyAtPosition(target) then
-            local nextScreen = win:screen():next()
+            local nextScreen = win:screen():toEast()
             target = {
                 x = flip(nextScreen:frame().x + win:screen():frame().w/factor, factor, nextScreen),
                 y = win:screen():frame().y + win:screen():frame().h/factor,
@@ -278,7 +278,7 @@ function moveLeftMonitor()
 
     if hs.window.focusedWindow() then
         local win = hs.window.focusedWindow()
-        local prevScreen = win:screen():previous()
+        local prevScreen = win:screen():toWest()
 
         win:moveToScreen(prevScreen, false, true)
     end
@@ -290,7 +290,7 @@ function moveRightMonitor()
 
     if hs.window.focusedWindow() then
         local win = hs.window.focusedWindow()
-        local nextScreen = win:screen():next()
+        local nextScreen = win:screen():toEast()
 
         win:moveToScreen(nextScreen, false, true)
     end
