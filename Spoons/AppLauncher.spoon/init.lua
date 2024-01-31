@@ -9,7 +9,7 @@ obj.author = "Eugene Ching"
 function obj:start()
     hs.hotkey.bind({"cmd"}, 'f1', function() hs.application.launchOrFocus('slack') end)
     hs.hotkey.bind({"cmd"}, 'f2', function() hs.application.launchOrFocus('whatsapp') end)
-    hs.hotkey.bind({"cmd"}, 'f3', function() hs.application.launchOrFocus('telegram a') end)
+    hs.hotkey.bind({"cmd"}, 'f3', function() hs.application.launchOrFocus('telegram') end)
     hs.hotkey.bind({"cmd"}, 'f4', function() hs.application.launchOrFocus('numi') end)
     hs.hotkey.bind({"cmd"}, 'f5', function() hs.application.launchOrFocus('forklift') end)
     hs.hotkey.bind({"cmd"}, 'f6', function() hs.application.launchOrFocus('standard notes') end)
