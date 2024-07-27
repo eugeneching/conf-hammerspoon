@@ -18,7 +18,7 @@ function obj:start()
     -- hs.hotkey.bind({"cmd"}, 'f9', function() hs.execute('open -n -a "Google Chrome" --args --profile-directory="Default" about:blank') end)
     hs.hotkey.bind({"cmd"}, 'f9', function() hs.application.launchOrFocus('google chrome') end)
     hs.hotkey.bind({"cmd"}, 'f12', function() hs.application.launchOrFocus('notion') end)
-    hs.hotkey.bind({}, 'f15', function() hs.application.launchOrFocus("todoist") end)
+    hs.hotkey.bind({}, 'f15', function() hs.application.launchOrFocus("reminders") end)
 end
 
 return obj
