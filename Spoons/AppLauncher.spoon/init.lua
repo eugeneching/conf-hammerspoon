@@ -16,7 +16,7 @@ function obj:start()
     hs.hotkey.bind({"cmd"}, 'f7', function() hs.application.launchOrFocus('iterm') end)
     hs.hotkey.bind({"cmd"}, 'f8', function() hs.application.launchOrFocus('visual studio code') end)
     hs.hotkey.bind({"cmd"}, 'f9', function() hs.application.launchOrFocus('google chrome') end)
-    hs.hotkey.bind({"cmd"}, 'f12', function() hs.application.launchOrFocus('capacities') end)
+    hs.hotkey.bind({"cmd"}, 'f12', function() hs.application.launchOrFocus('bear') end)
     hs.hotkey.bind({}, 'f15', function() hs.application.launchOrFocus("reminders") end)
 
     -- hs.hotkey.bind({"cmd"}, 'f9', function() hs.execute('open -n -a "Google Chrome" --args --profile-directory="Default" about:blank') end)
